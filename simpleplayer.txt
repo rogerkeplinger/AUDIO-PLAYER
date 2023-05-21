@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body{ background:#666; }
+button{ border:none; cursor:pointer; outline:none; }
+button#playpausebtn{
+	background:url(images/play.png) no-repeat;
+	width:20px;
+	height:20px;
+}
+</style>
+<script>
+var audio, playbtn;
+function initAudioPlayer(){
+
+
+	audio = new Audio();
+	audio.src = "https://rogerkeplinger.com/audio/11.mp3";
+
+
+	playbtn = document.getElementById("playpausebtn");
+	playbtn.addEventListener("click",playPause);
+	function playPause(){
+		if(audio.paused){
+		    audio.play();
+		    playbtn.style.background = "url(https://rogerkeplinger.com/images/pause.png) no-repeat";
+	    } else {
+		    audio.pause();
+		    playbtn.style.background = "url(https://rogerkeplinger.com/images/play.png) no-repeat";
+	    }
+	}
+}
+window.addEventListener("load", initAudioPlayer);
+</script>
+</head>
+<body>
+<button id="playpausebtn"></button>
+</body>
+</html>
