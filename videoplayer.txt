@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=700">
+<style>
+div#video_player_box{ width:550px; background:#000; margin:0px auto;}
+div#video_controls_bar{ background: #333; padding:10px; color:#CCC;}
+input#seekslider{ width:180px; }
+input#volumeslider{ width: 100px;}
+input#playbackRateslider{ width: 180px;}
+</style>
+<script>
+var vid, playbtn, playbackRateslider, seekslider, curtimetext, durtimetext,volumeslider,fullscreenbtn;
+function intializePlayer(){
+	// Set object references
+	vid = document.getElementById("my_video");
+	playbtn = document.getElementById("playpausebtn");
+	seekslider = document.getElementById("seekslider");
+        volumeslider = document.getElementById("volumeslider");
+	curtimetext = document.getElementById("curtimetext");
+	durtimetext = document.getElementById("durtimetext");
+        playbackRateslider = document.getElementById("playbackRateslider");
+        fullscreenbtn = document.getElementById("fullscreenbtn");
+	// Add event listeners
+	playbtn.addEventListener("click",playPause,false);
+	seekslider.addEventListener("change",vidSeek,false);
+        volumeslider.addEventListener("change",setvolume,false);
+	vid.addEventListener("timeupdate",seektimeupdate,false);
+        playbackRateslider.addEventListener("change",changeSpeed);
+        fullscreenbtn.addEventListener("click",toggleFullScreen,false);
+}
+window.onload = intializePlayer;
+
+function playPause(){
+	if(vid.paused){
+		vid.play();
+		playbtn.innerHTML = "Pause";
+	} else {
+		vid.pause();
+		playbtn.innerHTML = "Play";
+               
+	}
+
+        
+
+}
+function vidSeek(){
+	var seekto = vid.duration * (seekslider.value / 100);
+	vid.currentTime = seekto;
+}
+function setvolume(){
+	vid.volume = volumeslider.value / 100;
+}
+function seektimeupdate(){
+	var nt = vid.currentTime * (100 / vid.duration);
+	seekslider.value = nt;
+	var curmins = Math.floor(vid.currentTime / 60);
+	var cursecs = Math.floor(vid.currentTime - curmins * 60);
+	var durmins = Math.floor(vid.duration / 60);
+	var dursecs = Math.floor(vid.duration - durmins * 60);
+	if(cursecs < 10){ cursecs = "0"+cursecs; }
+	if(dursecs < 10){ dursecs = "0"+dursecs; }
+	if(curmins < 10){ curmins = "0"+curmins; }
+	if(durmins < 10){ durmins = "0"+durmins; }
+	curtimetext.innerHTML = curmins+":"+cursecs;
+	durtimetext.innerHTML = durmins+":"+dursecs;
+}
+        playbackRateslider.addEventListener("change",changeSpeed);
+	function changeSpeed(event){
+		my_video.playbackRate = event.target.value;   
+  }
+
+function toggleFullScreen(){
+	if(vid.requestFullScreen){
+		vid.requestFullScreen();
+	} else if(vid.webkitRequestFullScreen){
+		vid.webkitRequestFullScreen();
+	} else if(vid.mozRequestFullScreen){
+		vid.mozRequestFullScreen();
+	}
+}
+
+</script>
+</head>
+<body>
+<div id="video_player_box">
+  <video id="my_video" width="550" height="310" loop>
+    <source src= "https://rogerkeplinger.com/video/plushplush.mp4">
+  </video>
+  <div id="video_controls_bar">
+     <button id="playpausebtn">Play</button>
+    <input id="seekslider" type="range" min="0" max="100" value="0" 
+     step="1">
+    <input id="volumeslider" type="range" min="0" max="100" value="100" 
+     step="1">
+    <span id="curtimetext">00:00</span> / <span 
+     id="durtimetext">00:00</span>
+    <label for="playbackRateslider">Speed:</label>
+    <input id="playbackRateslider" type="range" id="pbrate" min=.5 max=3 value=1 step=.1>
+    </select>
+    <button id="fullscreenbtn">[ &nbsp; ]</button>
+
+
+  </div>
+</div>
+</body>
+</html>
